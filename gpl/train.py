@@ -23,6 +23,7 @@ import logging
 import argparse
 from typing import List, Union
 import math
+from beir_data_loader import GenericDataLoader as GDL
 # import crash_ipdb
 
 
@@ -56,7 +57,8 @@ def train(
     eval_split: str = 'test',
     use_train_qrels: bool = False,
     gpl_score_function: str = 'dot',
-    rescale_range: List[float] = None
+    rescale_range: List[float] = None,
+    add_1000_samples: str = '',
 ):     
     #### Assertions ####
     assert pooling in [None, 'mean', 'cls', 'max']
@@ -97,7 +99,7 @@ def train(
         else:
             queries_per_passage = 3
         logger.info(f'Automatically set `queries_per_passage` to {queries_per_passage}')
-
+    print(queries_per_passage)
 
     #### Synthetic query generation ####
     #### This will be skipped if there is an existing `gen-queries.jsonl`file under `path_to_generated_data` ####
@@ -121,6 +123,11 @@ def train(
     elif f'{qgen_prefix}-qrels' in os.listdir(path_to_generated_data) and f'{qgen_prefix}-queries.jsonl' in os.listdir(path_to_generated_data):
         logger.info('Loading from existing generated data')
         corpus, gen_queries, gen_qrels = GenericDataLoader(path_to_generated_data, prefix=qgen_prefix).load(split="train")
+        if add_1000_samples != '':
+            logger.info('Augment 1000 data used')
+            _, query1000, qrel1000 = GDL(f"/media/disk1/intern1001/{add_1000_samples}").load_1000(split='train', num=1000)
+            gen_queries.update(query1000)
+            gen_qrels.update(qrel1000)
     else:
         logger.info('No generated queries found. Now generating it')
         assert 'corpus.jsonl' in os.listdir(path_to_generated_data), 'At least corpus should exist!'
@@ -246,5 +253,6 @@ if __name__ == '__main__':
     parser.add_argument('--mnrl_evaluation_output', default=None)
     parser.add_argument('--eval_split', type=str, default='test', choices=['train', 'test', 'dev'], help='Which split to evaluate on') 
     parser.add_argument('--use_train_qrels', action='store_true', default=False)
+    parser.add_argument('--add_1000_samples', default='')
     args = parser.parse_args()
     train(**vars(args))

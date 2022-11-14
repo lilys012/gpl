@@ -3,6 +3,10 @@ __pycache__/
 *.py[cod]
 *$py.class
 
+output/
+T5_outputs/
+saved_model
+
 # C extensions
 *.so
 

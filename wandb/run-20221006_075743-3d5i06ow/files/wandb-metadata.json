@@ -1,0 +1,29 @@
+{
+    "os": "Linux-5.4.0-122-generic-x86_64-with-debian-bullseye-sid",
+    "python": "3.6.13",
+    "heartbeatAt": "2022-10-06T07:57:43.791485",
+    "startedAt": "2022-10-06T07:57:43.148051",
+    "docker": null,
+    "gpu": "NVIDIA GeForce GTX 1080 Ti",
+    "gpu_count": 2,
+    "cpu_count": 12,
+    "cuda": null,
+    "args": [
+        "--data_path",
+        "/media/disk1/intern1001/fiqa",
+        "--data_name",
+        "fiqa"
+    ],
+    "state": "running",
+    "program": "valT5.py",
+    "codePath": "valT5.py",
+    "git": {
+        "remote": "https://github.com/UKPLab/gpl.git",
+        "commit": "27b1ffb92be548e7d1be02a3c4c0a71d8b12b21a"
+    },
+    "email": null,
+    "root": "/home/intern1001/gpl",
+    "host": "milab12",
+    "username": "root",
+    "executable": "/home/intern1001/anaconda3/envs/gpl-reproduction/bin/python3"
+}
